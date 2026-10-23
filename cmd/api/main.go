@@ -11,7 +11,9 @@ import (
 
 func main() {
 	cfg := config.Load()
-	healthHandler := health.NewHandler()
+
+	healthService := health.NewService()
+	healthHandler := health.NewHandler(healthService)
 
 	router := httpserver.NewRouter(healthHandler)
 

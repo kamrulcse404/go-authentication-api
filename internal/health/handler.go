@@ -7,17 +7,20 @@ import (
 )
 
 type Handler struct {
+	service *Service
 }
 
-func NewHandler() *Handler {
-	return &Handler{}
+func NewHandler(service *Service) *Handler {
+	return &Handler{
+		service: service,
+	}
 }
 
 func (h *Handler) Check(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 
 	response := map[string]string{
-		"status": "ok",
+		"status": h.service.GetStatus(),
 	}
 
 	err := json.NewEncoder(w).Encode(response)
