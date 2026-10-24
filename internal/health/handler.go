@@ -6,11 +6,15 @@ import (
 	"net/http"
 )
 
-type Handler struct {
-	service *Service
+type StatusService interface {
+	GetStatus() string
 }
 
-func NewHandler(service *Service) *Handler {
+type Handler struct {
+	service StatusService
+}
+
+func NewHandler(service StatusService) *Handler {
 	return &Handler{
 		service: service,
 	}
