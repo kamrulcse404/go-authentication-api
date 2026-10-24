@@ -4,6 +4,8 @@ import (
 	"authentication-api/internal/config"
 	"authentication-api/internal/health"
 	httpserver "authentication-api/internal/http"
+	"authentication-api/internal/platform/database"
+	"context"
 	"log"
 	"net/http"
 	"time"
@@ -11,6 +13,17 @@ import (
 
 func main() {
 	cfg := config.Load()
+
+	ctx := context.Background()
+	dbPool, err := database.NewPostgresPool(ctx, cfg.DatabaseURL)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	defer dbPool.Close()
+
+	log.Println("Database connection established")
 
 	healthService := health.NewService()
 	healthHandler := health.NewHandler(healthService)
